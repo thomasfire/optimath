@@ -48,7 +48,7 @@ double bisection_method(const double search_begin, const double search_end) {
         count_loops++;
 #endif
         buffer = (start + stop) / 2;
-        if(FUNC(stop) > FUNC(buffer))
+        if(FUNC(stop) < FUNC(buffer))
             start = buffer;
         else
             stop = buffer;
@@ -74,7 +74,7 @@ double golden_ratio_method(const double search_begin, const double search_end) {
         double buff_diff = (stop - start) / GOLDEN_RATIO;
         buffer_start = stop - buff_diff;
         buffer_stop = start + buff_diff;
-        if(FUNC(buffer_start) <= FUNC(buffer_stop))
+        if(FUNC(buffer_start) >= FUNC(buffer_stop))
             start = buffer_start;
         else
             stop = buffer_stop;
