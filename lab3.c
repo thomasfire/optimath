@@ -191,6 +191,28 @@ double true_newton_method(const double search_begin, const double search_end) {
     return buffer_x;
 }
 
+double squared_method(const double search_begin, const double search_end) {
+    double x_star = (search_begin + search_end) / 2, x_zero = 0;
+    double h = 2 * EPSILON,
+           x_s = x_star - h, x_e = x_star + h;
+    double f_s, f_e, f_z, a, b;
+    dcounter_init(count_loops);
+    while (fabs(x_star - x_zero) > EPSILON) {
+        dcounter_inc(count_loops);
+        x_zero = x_star;
+        f_s = FUNC(x_s);
+        f_e = FUNC(x_e);
+        f_z = FUNC(x_zero);
+        a = ((f_e - ((x_e * (f_z - f_s) + x_zero * f_s - x_s * f_z) / (x_zero - x_s)))) / (x_e * (x_e - x_s - x_zero) + x_s * x_zero);
+        b = ((f_z - f_s) / (x_zero - x_s)) - (a * (x_s + x_zero));
+        x_star = -b / (2 * a);
+        x_s = x_star - h;
+        x_e = x_star + h;
+    }
+    debugf("Squared interpolation method counted loops, with 3 F(x) calls on each: %u\n", count_loops);
+    return x_star;
+}
+
 int main(int argc, const char *argv[]) {
     printf(SEARCH_TASK"\n");
     printf("Bisection method: min = %f;\n\n", bisection_method(SEARCH_BEGIN, SEARCH_END));
@@ -201,5 +223,6 @@ int main(int argc, const char *argv[]) {
     printf("Chord method: min = %f;\n\n", chord_method(SEARCH_BEGIN, SEARCH_END));
     printf("Newton's method: min = %f;\n\n", newton_method(SEARCH_BEGIN, SEARCH_END));
     printf("True newton's method: min = %f;\n\n", true_newton_method(SEARCH_BEGIN, SEARCH_END));
+    printf("Squared interpolation method: min = %f;\n\n", squared_method(SEARCH_BEGIN, SEARCH_END));
     return 0;
 }
