@@ -75,6 +75,7 @@ double halves_method(const double search_begin, const double search_end) {
         buffer = (start + stop) / 2;
         buffer_l = buffer - EPSILON;
         buffer_r = buffer + EPSILON;
+        debugf("F(%f)=%f; F(%f)=%f;\n", buffer_l, FUNC(buffer_l), buffer_r, FUNC(buffer_r));
         if (FUNC(buffer_l) >= FUNC(buffer_r))
             start = buffer;
         else
@@ -112,6 +113,7 @@ double true_golden_ratio_method(double search_begin, double search_end) {
     dcounter_init(count_loops);
     do {
         dcounter_inc(count_loops);
+        debugf("F(%f)=%f; F(%f)=%f;\n", lhs, FUNC(lhs), rhs, FUNC(rhs));
         if (FUNC(lhs) < FUNC(rhs)) {
             search_end = rhs;
             rhs = lhs;
@@ -156,6 +158,7 @@ double chord_method(const double search_begin, const double search_end)
         tmp_begin = DFUNC(buff_begin);
         tmp_end = DFUNC(buff_end);
         x_next = buff_end - tmp_end * (buff_begin - buff_end) / (tmp_begin - tmp_end);
+        debugf("DF(%f)=%f; DF(%f)=%f; new x = %f\n", buff_begin, tmp_begin, buff_end, tmp_end, x_next);
         buff_begin = buff_end;
         buff_end = tmp;
     } while (fabs(x_next - buff_end) > EPSILON && buff_begin >= search_end && buff_end <= search_end);
@@ -185,6 +188,7 @@ double true_newton_method(const double search_begin, const double search_end) {
         buffer_start = buffer_x;
         buff_d = DFUNC(buffer_x);
         buff_dd = DDFUNC(buffer_x);
+        debugf("DF(%f)=%f; DDF(%f)=%f; new x = %f\n", buffer_x, buff_d, buffer_x, buff_dd, buffer_x - buff_d / buff_dd);
         buffer_x = buffer_x - buff_d / buff_dd;
     } while (fabs(buff_d) > EPSILON);
     debugf("True newton's method counted loops, with 1 DF(x) and 1 DDF(x) calls on each: %u\n", count_loops);
@@ -205,6 +209,7 @@ double squared_method(const double search_begin, const double search_end) {
         f_z = FUNC(x_zero);
         a = ((f_e - ((x_e * (f_z - f_s) + x_zero * f_s - x_s * f_z) / (x_zero - x_s)))) / (x_e * (x_e - x_s - x_zero) + x_s * x_zero);
         b = ((f_z - f_s) / (x_zero - x_s)) - (a * (x_s + x_zero));
+        debugf("F(%f)=%f; F(%f)=%f; F(%f)=%f; a=%f, b=%f\n", x_s, f_s, x_zero, f_z, x_e, f_e, a, b);
         x_star = -b / (2 * a);
         x_s = x_star - h;
         x_e = x_star + h;
