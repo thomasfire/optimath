@@ -9,3 +9,5 @@ target_link_libraries(lab3 m)
 
 add_executable(lab_grad lab_grad.c)
 target_link_libraries(lab_grad m)
+
+add_executable(lab_genetic lab_genetic.c)
